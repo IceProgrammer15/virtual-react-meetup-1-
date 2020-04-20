@@ -3,7 +3,7 @@
  * Halifax React Meetup
  */
 
-import React, {useState, useEffect, useRef, useCallback} from 'react';
+import React, {useState, useEffect, useCallback} from 'react';
 import {
   SafeAreaView,
   StyleSheet,
@@ -44,11 +44,15 @@ const App = () => {
 
   const removeCard = useCallback(
     (id) => {
-      // find index of item we want to remove
       const itemIndex = data.findIndex((item) => item.id === id);
+      console.log(itemIndex, data.length);
 
       // return if item cannot be found within the array
       if (itemIndex < 0) {
+        console.log(
+          id,
+          data.map((item) => item.id),
+        );
         return;
       }
       // get a copy of data
@@ -58,39 +62,63 @@ const App = () => {
       updatedData.splice(itemIndex, 1);
 
       // update list with new data
-      setData(updatedData);
+      setData([...updatedData]);
+      console.log(itemIndex, updatedData.length);
     },
     [data],
   );
 
   const renderCard = useCallback(
-    (gitUserInfo) => (
-      <View style={styles.card} key={gitUserInfo.item.id}>
-        <Image
-          source={{uri: gitUserInfo.item.avatar_url}}
-          style={styles.avatar}
-        />
-        <View style={styles.cardContent}>
-          <Text style={styles.txtLogin}>{gitUserInfo.item.login}</Text>
+    (gitUserInfo) => {
+      const animate = new Animated.Value(0);
 
-          <TouchableOpacity
-            activeOpacity={0.6}
-            onPress={() => {
-              Linking.openURL(gitUserInfo.item.html_url);
-            }}>
-            <Text style={styles.txtLink}>{gitUserInfo.item.html_url}</Text>
-          </TouchableOpacity>
-        </View>
-        <View style={styles.btnRemove}>
-          <TouchableOpacity onPress={() => removeCard(gitUserInfo.item.id)}>
-            <Text style={styles.txtRemove}>x</Text>
-          </TouchableOpacity>
-        </View>
-      </View>
-    ),
-    [],
+      const animatedStyle = [
+        styles.card,
+        {
+          opacity: animate.interpolate({
+            inputRange: [0, 1],
+            outputRange: [1, 0],
+          }),
+        },
+      ];
+
+      return (
+        <Animated.View style={animatedStyle} key={gitUserInfo.item.id}>
+          <Image
+            source={{uri: gitUserInfo.item.avatar_url}}
+            style={styles.avatar}
+          />
+          <View style={styles.cardContent}>
+            <Text style={styles.txtLogin}>{gitUserInfo.item.login}</Text>
+
+            <TouchableOpacity
+              activeOpacity={0.6}
+              onPress={() => {
+                Linking.openURL(gitUserInfo.item.html_url);
+              }}>
+              <Text style={styles.txtLink}>{gitUserInfo.item.html_url}</Text>
+            </TouchableOpacity>
+          </View>
+          <View style={styles.btnRemove}>
+            <TouchableOpacity
+              onPress={() => {
+                Animated.timing(animate, {
+                  toValue: 1,
+                  duration: 500,
+                  useNativeDriver: true,
+                }).start(() => {
+                  removeCard(gitUserInfo.item.id);
+                });
+              }}>
+              <Text style={styles.txtRemove}>x</Text>
+            </TouchableOpacity>
+          </View>
+        </Animated.View>
+      );
+    },
+    [removeCard],
   );
-  const separatorComponent = () => <View style={styles.separator}></View>;
+  const separatorComponent = () => <View style={styles.separator} />;
 
   return (
     <>
