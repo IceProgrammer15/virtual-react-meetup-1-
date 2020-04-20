@@ -3,7 +3,7 @@
  * Halifax React Meetup
  */
 
-import React from 'react';
+import React, {useState, useEffect} from 'react';
 import {
   SafeAreaView,
   StyleSheet,
@@ -12,45 +12,70 @@ import {
   Image,
   TouchableOpacity,
   Linking,
+  ScrollView,
 } from 'react-native';
 
-const info = {
-  login: 'IceProgrammer15',
-  avatar_url: 'https://avatars2.githubusercontent.com/u/14126952?v=4',
-  html_url: 'https://github.com/IceProgrammer15',
+const renderCard = (gitUserInfo) => (
+  <View style={styles.card} key={gitUserInfo.id}>
+    <Image source={{uri: gitUserInfo.avatar_url}} style={styles.avatar} />
+    <View style={styles.cardContent}>
+      <Text style={styles.txtLogin}>{gitUserInfo.login}</Text>
+
+      <TouchableOpacity
+        activeOpacity={0.6}
+        onPress={() => {
+          Linking.openURL(gitUserInfo.html_url);
+        }}>
+        <Text style={styles.txtLink}>{gitUserInfo.html_url}</Text>
+      </TouchableOpacity>
+    </View>
+  </View>
+);
+
+const sendRequest = async () => {
+  try {
+    const response = await fetch('https://api.github.com/users?since=14126951');
+    if (response.status === 200) {
+      const data = await response.json();
+      return data;
+    }
+  } catch {}
 };
 
 const App = () => {
+  const [data, setData] = useState([]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const response = await sendRequest();
+      if (response) {
+        setData(response);
+      }
+    };
+
+    fetchData();
+
+    return () => {};
+  }, []);
+
   return (
     <>
-      <SafeAreaView style={styles.headBkg}>
+      <SafeAreaView style={styles.container}>
         <View style={[styles.header, styles.headBkg]}>
           <Text>Virtual React Meetup</Text>
         </View>
-        <View style={styles.content}>
-          <View style={styles.card}>
-            <Image source={{uri: info.avatar_url}} style={styles.avatar} />
-            <View style={styles.cardContent}>
-              <Text style={styles.txtLogin}>{info.login}</Text>
-
-              <TouchableOpacity
-                activeOpacity={0.6}
-                onPress={() => {
-                  Linking.openURL(info.html_url);
-                }}>
-                <Text style={styles.txtLink}>{info.html_url}</Text>
-              </TouchableOpacity>
-            </View>
-          </View>
-        </View>
+        <ScrollView style={styles.content}>
+          {data.map((record) => renderCard(record))}
+        </ScrollView>
       </SafeAreaView>
     </>
   );
 };
 
 const styles = StyleSheet.create({
-  headBkg: {
+  container: {
     backgroundColor: '#f5f5f5',
+    flex: 1,
   },
   header: {
     paddingVertical: 15,
@@ -60,12 +85,12 @@ const styles = StyleSheet.create({
   },
   content: {
     backgroundColor: '#fff',
+    flex: 1,
   },
   card: {
     flexDirection: 'row',
     paddingVertical: 8,
     paddingHorizontal: 5,
-    backgroundColor: '#eee',
   },
   avatar: {
     width: 64,
