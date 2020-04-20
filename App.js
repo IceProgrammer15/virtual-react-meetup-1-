@@ -75,10 +75,25 @@ const App = () => {
       const animatedStyle = [
         styles.card,
         {
-          opacity: animate.interpolate({
-            inputRange: [0, 1],
-            outputRange: [1, 0],
+          backgroundColor: animate.interpolate({
+            inputRange: [0, 0.5, 1],
+            outputRange: ['white', 'yellow', 'red'],
           }),
+          transform: [
+            {
+              scale: animate.interpolate({
+                inputRange: [0, 1],
+                outputRange: [1, 0.2],
+              }),
+            },
+            {
+              rotate: animate.interpolate({
+                inputRange: [0, 1],
+                outputRange: ['0deg', '360deg'],
+                extrapolate: 'clamp',
+              }),
+            },
+          ],
         },
       ];
 
@@ -104,8 +119,8 @@ const App = () => {
               onPress={() => {
                 Animated.timing(animate, {
                   toValue: 1,
-                  duration: 500,
-                  useNativeDriver: true,
+                  duration: 1000,
+                  useNativeDriver: false,
                 }).start(() => {
                   removeCard(gitUserInfo.item.id);
                 });
