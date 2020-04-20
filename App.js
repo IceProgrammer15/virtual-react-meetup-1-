@@ -16,10 +16,16 @@ import {
   Animated,
   ImageBackground,
 } from 'react-native';
+
+const url = 'https://api.github.com/users?since=14126951';
 import imgBackground from './assets/kl.jpg';
+
+/**
+ * using fetch to make an HTTP request and return results as JSON
+ */
 const sendRequest = async () => {
   try {
-    const response = await fetch('https://api.github.com/users?since=14126951');
+    const response = await fetch(url);
     if (response.status === 200) {
       const data = await response.json();
       return data;
@@ -28,8 +34,14 @@ const sendRequest = async () => {
 };
 
 const App = () => {
+  /**
+   * use state to keep data returned back by API
+   */
   const [data, setData] = useState([]);
 
+  /**
+   * useEffect hook used to fetch data once this component initialized and mounted
+   */
   useEffect(() => {
     const fetchData = async () => {
       const response = await sendRequest();
@@ -37,12 +49,13 @@ const App = () => {
         setData(response);
       }
     };
-
     fetchData();
-
     return () => {};
   }, []);
 
+  /**
+   * This function will receive id of an element and will remove it from data
+   */
   const removeCard = useCallback(
     (id) => {
       const itemIndex = data.findIndex((item) => item.id === id);
@@ -50,10 +63,6 @@ const App = () => {
 
       // return if item cannot be found within the array
       if (itemIndex < 0) {
-        console.log(
-          id,
-          data.map((item) => item.id),
-        );
         return;
       }
       // get a copy of data
@@ -69,6 +78,9 @@ const App = () => {
     [data],
   );
 
+  /**
+   * Renders a single row in the list
+   */
   const renderCard = useCallback(
     (gitUserInfo) => {
       const animate = new Animated.Value(0);
@@ -134,26 +146,26 @@ const App = () => {
     },
     [removeCard],
   );
-  const separatorComponent = () => <View style={styles.separator} />;
 
+  /**
+   * Main render function of the entire screen
+   */
   return (
-    <>
-      <SafeAreaView style={styles.container}>
-        <View style={[styles.header, styles.headBkg]}>
-          <Text>Virtual React Meetup</Text>
-        </View>
+    <SafeAreaView style={styles.container}>
+      <View style={[styles.header, styles.headBkg]}>
+        <Text>Virtual React Meetup</Text>
+      </View>
 
-        <ImageBackground source={imgBackground} style={styles.imgBkg}>
-          <FlatList
-            style={styles.list}
-            data={data}
-            renderItem={renderCard}
-            keyExtractor={(item) => String(item.id)}
-            //ItemSeparatorComponent={separatorComponent}
-          />
-        </ImageBackground>
-      </SafeAreaView>
-    </>
+      <ImageBackground source={imgBackground} style={styles.imgBkg}>
+        <FlatList
+          style={styles.list}
+          data={data}
+          renderItem={renderCard}
+          keyExtractor={(item) => String(item.id)}
+          initialNumToRender={10}
+        />
+      </ImageBackground>
+    </SafeAreaView>
   );
 };
 
@@ -178,11 +190,12 @@ const styles = StyleSheet.create({
     paddingHorizontal: 5,
     marginVertical: 4,
     marginHorizontal: 8,
-    borderRadius: 15,
+    borderRadius: 10,
   },
   avatar: {
     width: 64,
     height: 64,
+    borderRadius: 8,
   },
   cardContent: {
     flex: 1,
@@ -205,10 +218,6 @@ const styles = StyleSheet.create({
     fontSize: 22,
     fontWeight: 'bold',
     padding: 10,
-  },
-  separator: {
-    height: 1,
-    backgroundColor: '#aaa',
   },
   list: {},
   imgBkg: {
