@@ -3,7 +3,7 @@
  * Halifax React Meetup
  */
 
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useRef, useCallback} from 'react';
 import {
   SafeAreaView,
   StyleSheet,
@@ -13,29 +13,8 @@ import {
   TouchableOpacity,
   Linking,
   FlatList,
+  Animated,
 } from 'react-native';
-
-const renderCard = (gitUserInfo) => (
-  <View style={styles.card} key={gitUserInfo.item.id}>
-    <Image source={{uri: gitUserInfo.item.avatar_url}} style={styles.avatar} />
-    <View style={styles.cardContent}>
-      <Text style={styles.txtLogin}>{gitUserInfo.item.login}</Text>
-
-      <TouchableOpacity
-        activeOpacity={0.6}
-        onPress={() => {
-          Linking.openURL(gitUserInfo.item.html_url);
-        }}>
-        <Text style={styles.txtLink}>{gitUserInfo.item.html_url}</Text>
-      </TouchableOpacity>
-    </View>
-    <View style={styles.btnRemove}>
-      <TouchableOpacity>
-        <Text style={styles.txtRemove}>x</Text>
-      </TouchableOpacity>
-    </View>
-  </View>
-);
 
 const sendRequest = async () => {
   try {
@@ -62,6 +41,55 @@ const App = () => {
 
     return () => {};
   }, []);
+
+  const removeCard = useCallback(
+    (id) => {
+      // find index of item we want to remove
+      const itemIndex = data.findIndex((item) => item.id === id);
+
+      // return if item cannot be found within the array
+      if (itemIndex < 0) {
+        return;
+      }
+      // get a copy of data
+      const updatedData = [...data];
+
+      // remove the item from array
+      updatedData.splice(itemIndex, 1);
+
+      // update list with new data
+      setData(updatedData);
+    },
+    [data],
+  );
+
+  const renderCard = useCallback(
+    (gitUserInfo) => (
+      <View style={styles.card} key={gitUserInfo.item.id}>
+        <Image
+          source={{uri: gitUserInfo.item.avatar_url}}
+          style={styles.avatar}
+        />
+        <View style={styles.cardContent}>
+          <Text style={styles.txtLogin}>{gitUserInfo.item.login}</Text>
+
+          <TouchableOpacity
+            activeOpacity={0.6}
+            onPress={() => {
+              Linking.openURL(gitUserInfo.item.html_url);
+            }}>
+            <Text style={styles.txtLink}>{gitUserInfo.item.html_url}</Text>
+          </TouchableOpacity>
+        </View>
+        <View style={styles.btnRemove}>
+          <TouchableOpacity onPress={() => removeCard(gitUserInfo.item.id)}>
+            <Text style={styles.txtRemove}>x</Text>
+          </TouchableOpacity>
+        </View>
+      </View>
+    ),
+    [],
+  );
 
   return (
     <>
