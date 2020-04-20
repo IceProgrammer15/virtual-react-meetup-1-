@@ -58,6 +58,8 @@ const App = () => {
     return () => {};
   }, []);
 
+  const separatorComponent = () => <View style={styles.separator} />;
+
   return (
     <>
       <SafeAreaView style={styles.container}>
@@ -69,6 +71,7 @@ const App = () => {
           data={data}
           renderItem={renderCard}
           keyExtractor={(item) => String(item.id)}
+          ItemSeparatorComponent={separatorComponent}
         />
       </SafeAreaView>
     </>
@@ -111,6 +114,10 @@ const styles = StyleSheet.create({
   txtLink: {
     color: '#06f',
     textDecorationLine: 'underline',
+  },
+  separator: {
+    height: 1,
+    backgroundColor: '#aaa',
   },
 });
 
