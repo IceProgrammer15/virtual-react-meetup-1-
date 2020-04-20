@@ -14,8 +14,9 @@ import {
   Linking,
   FlatList,
   Animated,
+  ImageBackground,
 } from 'react-native';
-
+import imgBackground from './assets/kl.jpg';
 const sendRequest = async () => {
   try {
     const response = await fetch('https://api.github.com/users?since=14126951');
@@ -77,7 +78,7 @@ const App = () => {
         {
           backgroundColor: animate.interpolate({
             inputRange: [0, 0.5, 1],
-            outputRange: ['white', 'yellow', 'red'],
+            outputRange: ['rgba(255,255,255,0.6)', 'yellow', 'red'],
           }),
           transform: [
             {
@@ -142,12 +143,15 @@ const App = () => {
           <Text>Virtual React Meetup</Text>
         </View>
 
-        <FlatList
-          data={data}
-          renderItem={renderCard}
-          keyExtractor={(item) => String(item.id)}
-          ItemSeparatorComponent={separatorComponent}
-        />
+        <ImageBackground source={imgBackground} style={styles.imgBkg}>
+          <FlatList
+            style={styles.list}
+            data={data}
+            renderItem={renderCard}
+            keyExtractor={(item) => String(item.id)}
+            //ItemSeparatorComponent={separatorComponent}
+          />
+        </ImageBackground>
       </SafeAreaView>
     </>
   );
@@ -172,6 +176,9 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     paddingVertical: 8,
     paddingHorizontal: 5,
+    marginVertical: 4,
+    marginHorizontal: 8,
+    borderRadius: 15,
   },
   avatar: {
     width: 64,
@@ -187,7 +194,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
   txtLink: {
-    color: '#06f',
+    color: '#060f75',
     textDecorationLine: 'underline',
   },
   btnRemove: {
@@ -202,6 +209,11 @@ const styles = StyleSheet.create({
   separator: {
     height: 1,
     backgroundColor: '#aaa',
+  },
+  list: {},
+  imgBkg: {
+    width: '100%',
+    height: '100%',
   },
 });
 
