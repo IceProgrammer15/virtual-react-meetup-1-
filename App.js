@@ -29,11 +29,6 @@ const renderCard = (gitUserInfo) => (
         <Text style={styles.txtLink}>{gitUserInfo.item.html_url}</Text>
       </TouchableOpacity>
     </View>
-    <View style={styles.btnRemove}>
-      <TouchableOpacity>
-        <Text style={styles.txtRemove}>x</Text>
-      </TouchableOpacity>
-    </View>
   </View>
 );
 
@@ -116,15 +111,6 @@ const styles = StyleSheet.create({
   txtLink: {
     color: '#06f',
     textDecorationLine: 'underline',
-  },
-  btnRemove: {
-    justifyContent: 'center',
-  },
-  txtRemove: {
-    color: '#c00',
-    fontSize: 22,
-    fontWeight: 'bold',
-    padding: 10,
   },
 });
 
