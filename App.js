@@ -90,6 +90,7 @@ const App = () => {
     ),
     [],
   );
+  const separatorComponent = () => <View style={styles.separator}></View>;
 
   return (
     <>
@@ -102,6 +103,7 @@ const App = () => {
           data={data}
           renderItem={renderCard}
           keyExtractor={(item) => String(item.id)}
+          ItemSeparatorComponent={separatorComponent}
         />
       </SafeAreaView>
     </>
@@ -153,6 +155,10 @@ const styles = StyleSheet.create({
     fontSize: 22,
     fontWeight: 'bold',
     padding: 10,
+  },
+  separator: {
+    height: 1,
+    backgroundColor: '#aaa',
   },
 });
 
