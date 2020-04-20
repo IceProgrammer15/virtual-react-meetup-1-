@@ -1,113 +1,88 @@
 /**
  * Sample React Native App
- * https://github.com/facebook/react-native
- *
- * @format
- * @flow strict-local
+ * Halifax React Meetup
  */
 
 import React from 'react';
 import {
   SafeAreaView,
   StyleSheet,
-  ScrollView,
   View,
   Text,
-  StatusBar,
+  Image,
+  TouchableOpacity,
+  Linking,
 } from 'react-native';
 
-import {
-  Header,
-  LearnMoreLinks,
-  Colors,
-  DebugInstructions,
-  ReloadInstructions,
-} from 'react-native/Libraries/NewAppScreen';
+const info = {
+  login: 'IceProgrammer15',
+  avatar_url: 'https://avatars2.githubusercontent.com/u/14126952?v=4',
+  html_url: 'https://github.com/IceProgrammer15',
+};
 
-const App: () => React$Node = () => {
+const App = () => {
   return (
     <>
-      <StatusBar barStyle="dark-content" />
-      <SafeAreaView>
-        <ScrollView
-          contentInsetAdjustmentBehavior="automatic"
-          style={styles.scrollView}>
-          <Header />
-          {global.HermesInternal == null ? null : (
-            <View style={styles.engine}>
-              <Text style={styles.footer}>Engine: Hermes</Text>
+      <SafeAreaView style={styles.headBkg}>
+        <View style={[styles.header, styles.headBkg]}>
+          <Text>Virtual React Meetup</Text>
+        </View>
+        <View style={styles.content}>
+          <View style={styles.card}>
+            <Image source={{uri: info.avatar_url}} style={styles.avatar} />
+            <View style={styles.cardContent}>
+              <Text style={styles.txtLogin}>{info.login}</Text>
+
+              <TouchableOpacity
+                activeOpacity={0.6}
+                onPress={() => {
+                  Linking.openURL(info.html_url);
+                }}>
+                <Text style={styles.txtLink}>{info.html_url}</Text>
+              </TouchableOpacity>
             </View>
-          )}
-          <View style={styles.body}>
-            <View style={styles.sectionContainer}>
-              <Text style={styles.sectionTitle}>Step One</Text>
-              <Text style={styles.sectionDescription}>
-                Edit <Text style={styles.highlight}>App.js</Text> to change this
-                screen and then come back to see your edits.
-              </Text>
-            </View>
-            <View style={styles.sectionContainer}>
-              <Text style={styles.sectionTitle}>See Your Changes</Text>
-              <Text style={styles.sectionDescription}>
-                <ReloadInstructions />
-              </Text>
-            </View>
-            <View style={styles.sectionContainer}>
-              <Text style={styles.sectionTitle}>Debug</Text>
-              <Text style={styles.sectionDescription}>
-                <DebugInstructions />
-              </Text>
-            </View>
-            <View style={styles.sectionContainer}>
-              <Text style={styles.sectionTitle}>Learn More</Text>
-              <Text style={styles.sectionDescription}>
-                Read the docs to discover what to do next:
-              </Text>
-            </View>
-            <LearnMoreLinks />
           </View>
-        </ScrollView>
+        </View>
       </SafeAreaView>
     </>
   );
 };
 
 const styles = StyleSheet.create({
-  scrollView: {
-    backgroundColor: Colors.lighter,
+  headBkg: {
+    backgroundColor: '#f5f5f5',
   },
-  engine: {
-    position: 'absolute',
-    right: 0,
+  header: {
+    paddingVertical: 15,
+    alignItems: 'center',
+    borderBottomColor: '#aaa',
+    borderBottomWidth: 1,
   },
-  body: {
-    backgroundColor: Colors.white,
+  content: {
+    backgroundColor: '#fff',
   },
-  sectionContainer: {
-    marginTop: 32,
-    paddingHorizontal: 24,
+  card: {
+    flexDirection: 'row',
+    paddingVertical: 8,
+    paddingHorizontal: 5,
+    backgroundColor: '#eee',
   },
-  sectionTitle: {
-    fontSize: 24,
-    fontWeight: '600',
-    color: Colors.black,
+  avatar: {
+    width: 64,
+    height: 64,
   },
-  sectionDescription: {
-    marginTop: 8,
-    fontSize: 18,
-    fontWeight: '400',
-    color: Colors.dark,
+  cardContent: {
+    flex: 1,
+    justifyContent: 'space-around',
+    paddingHorizontal: 10,
   },
-  highlight: {
-    fontWeight: '700',
+  txtLogin: {
+    fontWeight: 'bold',
+    fontSize: 16,
   },
-  footer: {
-    color: Colors.dark,
-    fontSize: 12,
-    fontWeight: '600',
-    padding: 4,
-    paddingRight: 12,
-    textAlign: 'right',
+  txtLink: {
+    color: '#06f',
+    textDecorationLine: 'underline',
   },
 });
 
