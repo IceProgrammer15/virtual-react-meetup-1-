@@ -4,6 +4,10 @@ This repository contains the complete [React Native](https://reactnative.dev/) s
 
 Repository demonstrates some of the common tasks in React Native like making API calls, handling lists , styles in React Native and animating UI components and some performance tips when it comes to displaying large lists.
 
+<p align="center">
+<img width="300" src="assets/v-react-meetup.gif" />
+</p>
+
 > Note : You may use Windows, macOS, or Linux as your development operating system, though building and running iOS apps is limited to macOS
 
 ## How to run the code
