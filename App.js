@@ -12,21 +12,26 @@ import {
   Image,
   TouchableOpacity,
   Linking,
-  ScrollView,
+  FlatList,
 } from 'react-native';
 
 const renderCard = (gitUserInfo) => (
-  <View style={styles.card} key={gitUserInfo.id}>
-    <Image source={{uri: gitUserInfo.avatar_url}} style={styles.avatar} />
+  <View style={styles.card} key={gitUserInfo.item.id}>
+    <Image source={{uri: gitUserInfo.item.avatar_url}} style={styles.avatar} />
     <View style={styles.cardContent}>
-      <Text style={styles.txtLogin}>{gitUserInfo.login}</Text>
+      <Text style={styles.txtLogin}>{gitUserInfo.item.login}</Text>
 
       <TouchableOpacity
         activeOpacity={0.6}
         onPress={() => {
-          Linking.openURL(gitUserInfo.html_url);
+          Linking.openURL(gitUserInfo.item.html_url);
         }}>
-        <Text style={styles.txtLink}>{gitUserInfo.html_url}</Text>
+        <Text style={styles.txtLink}>{gitUserInfo.item.html_url}</Text>
+      </TouchableOpacity>
+    </View>
+    <View style={styles.btnRemove}>
+      <TouchableOpacity>
+        <Text style={styles.txtRemove}>x</Text>
       </TouchableOpacity>
     </View>
   </View>
@@ -64,9 +69,12 @@ const App = () => {
         <View style={[styles.header, styles.headBkg]}>
           <Text>Virtual React Meetup</Text>
         </View>
-        <ScrollView style={styles.content}>
-          {data.map((record) => renderCard(record))}
-        </ScrollView>
+
+        <FlatList
+          data={data}
+          renderItem={renderCard}
+          keyExtractor={(item) => String(item.id)}
+        />
       </SafeAreaView>
     </>
   );
@@ -108,6 +116,15 @@ const styles = StyleSheet.create({
   txtLink: {
     color: '#06f',
     textDecorationLine: 'underline',
+  },
+  btnRemove: {
+    justifyContent: 'center',
+  },
+  txtRemove: {
+    color: '#c00',
+    fontSize: 22,
+    fontWeight: 'bold',
+    padding: 10,
   },
 });
 
