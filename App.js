@@ -93,7 +93,7 @@ const App = () => {
     [removeCard],
   );
 
-  const separatorComponent = () => <View style={styles.separator}></View>;
+  const separatorComponent = () => <View style={styles.separator} />;
   return (
     <>
       <SafeAreaView style={styles.container}>
