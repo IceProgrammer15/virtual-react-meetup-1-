@@ -90,7 +90,7 @@ const App = () => {
         </View>
       </View>
     ),
-    [],
+    [removeCard],
   );
 
   const separatorComponent = () => <View style={styles.separator}></View>;
