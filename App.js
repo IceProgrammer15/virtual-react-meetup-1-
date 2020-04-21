@@ -23,8 +23,8 @@ const info = {
 const App = () => {
   return (
     <>
-      <SafeAreaView style={styles.headBkg}>
-        <View style={[styles.header, styles.headBkg]}>
+      <SafeAreaView style={styles.container}>
+        <View style={styles.header}>
           <Text>Virtual React Meetup</Text>
         </View>
         <View style={styles.content}>
@@ -49,6 +49,10 @@ const App = () => {
 };
 
 const styles = StyleSheet.create({
+  container: {
+    backgroundColor: '#f5f5f5',
+    flex: 1,
+  },
   headBkg: {
     backgroundColor: '#f5f5f5',
   },
